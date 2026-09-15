@@ -1,5 +1,3 @@
-# Start from Alpine Linux because it is very small and is well suited
-# for a simple server container.
 FROM alpine:latest
 
 # Install ReadyMedia (formerly MiniDLNA).
