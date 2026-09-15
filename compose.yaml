@@ -1,0 +1,14 @@
+services:
+  minidlna:
+    build:
+      context: ./minidlna
+
+    container_name: minidlna
+
+    restart: unless-stopped
+
+    network_mode: host
+
+    volumes:
+      - ${HOMELAB_DATA}/minidlna:/var/cache/minidlna
+      - ${MEDIA_DIR}:/media:ro
