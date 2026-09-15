@@ -1,5 +1,3 @@
-# Start from Alpine Linux because it is very small and is well suited
-# for a simple server container.
 FROM alpine:latest
 
 # Install ReadyMedia (formerly MiniDLNA).
@@ -11,10 +9,10 @@ RUN apk add --no-cache \
 # Create the directories that will exist inside the container.
 # /config will contain our persistent ReadyMedia configuration/database.
 # /media will be the mount point for the actual movie/music/photo library.
-RUN mkdir -p /config /media
+RUN mkdir -p /media
 
 # Tell ReadyMedia where its configuration file is located.
-ENV MINIDLNA_CONFIG_FILE=/config/minidlna.conf
+ENV MINIDLNA_CONFIG_FILE=/minidlna.conf
 
 # Expose the normal ReadyMedia HTTP/status port.
 # NOTE: Because we use host networking, Docker does not actually
@@ -24,4 +22,4 @@ EXPOSE 8200
 # Start ReadyMedia in the foreground.
 # Keeping the main process in the foreground is important for Docker,
 # because the container stays alive while this process is running.
-CMD ["minidlnad", "-d", "-f", "/config/minidlna.conf"]
+CMD ["minidlnad", "-d", "-f", "/minidlna.conf"]
