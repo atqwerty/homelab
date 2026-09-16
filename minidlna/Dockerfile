@@ -1,25 +1,24 @@
 FROM alpine:latest
 
 # Install ReadyMedia (formerly MiniDLNA).
-# We also install tzdata so the container can use the correct timezone.
+# tzdata allows the container to use the configured timezone.
 RUN apk add --no-cache \
     minidlna \
     tzdata
 
-# Create the directories that will exist inside the container.
-# /config will contain our persistent ReadyMedia configuration/database.
-# /media will be the mount point for the actual movie/music/photo library.
-RUN mkdir -p /media
+# Create the directories used by ReadyMedia.
+# /media will be mounted from the host and contains our media library.
+# /var/cache/minidlna will be mounted from the host and contains
+# persistent database and log files.
+RUN mkdir -p /media /var/cache/minidlna/db /var/cache/minidlna/logs
 
-# Tell ReadyMedia where its configuration file is located.
-ENV MINIDLNA_CONFIG_FILE=/minidlna.conf
+# Copy our ReadyMedia configuration into the image.
+COPY minidlna.conf /minidlna.conf
 
-# Expose the normal ReadyMedia HTTP/status port.
-# NOTE: Because we use host networking, Docker does not actually
-# perform a normal port mapping for this port.
+# Expose the ReadyMedia HTTP/status port.
+# With host networking, Docker does not perform normal port mapping.
 EXPOSE 8200
 
 # Start ReadyMedia in the foreground.
-# Keeping the main process in the foreground is important for Docker,
-# because the container stays alive while this process is running.
+# Using an absolute path avoids ambiguity about the working directory.
 CMD ["minidlnad", "-d", "-f", "/minidlna.conf"]
