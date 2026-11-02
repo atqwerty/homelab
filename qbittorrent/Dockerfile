@@ -1,10 +1,7 @@
 FROM lscr.io/linuxserver/qbittorrent:latest
 
 # Need ffmpeg for the video conversion script
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache ffmpeg
 
 # Bake the conversion script into the image itself, so it's always
 # present regardless of volume mounts.
